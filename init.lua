@@ -198,6 +198,14 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- for CS322
+vim.api.nvim_create_autocmd('BufWritePost', {
+  pattern = '/Users/fsyang/src/compilers/*',
+  callback = function()
+    vim.fn.jobstart 'rsync -avz ~/src/compilers/ nrm2102@moore.wot.eecs.northwestern.edu:~/src/compilers/'
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -227,6 +235,17 @@ rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  {
+    'amitds1997/remote-nvim.nvim',
+    version = '*', -- Pin to GitHub releases
+    dependencies = {
+      'nvim-lua/plenary.nvim', -- For standard functions
+      'MunifTanjim/nui.nvim', -- To build the plugin UI
+      'nvim-telescope/telescope.nvim', -- For picking b/w different remote methods
+    },
+    config = true,
+  },
+
   {
     'lervag/vimtex',
     lazy = false, -- we don't want to lazy load VimTeX
@@ -679,6 +698,28 @@ require('lazy').setup({
         clangd = {
           cmd = { '/opt/homebrew/opt/llvm/bin/clangd' },
         },
+        ruff = {
+          on_attach = function(client)
+            client.server_capabilities.hoverProvider = false
+          end,
+        },
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              analysis = {
+                typeCheckingMode = 'standard',
+                diagnosticSeverityOverrides = {
+                  reportUnusedCallResult = false,
+                  reportUnknownMemberType = false,
+                  reportUnknownVariableType = false,
+                  reportUnknownArgumentType = false,
+                  reportUnknownParameterType = false,
+                  reportMissingTypeStubs = false,
+                },
+              },
+            },
+          },
+        },
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -729,17 +770,12 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
       }
+
+      for server_name, server in pairs(servers) do
+        server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+        vim.lsp.config(server_name, server)
+      end
     end,
   },
 
@@ -872,28 +908,43 @@ require('lazy').setup({
     },
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+  --{ -- You can easily change to a different colorscheme.
+  --  -- Change the name of the colorscheme plugin below, and then
+  --  -- change the command in the config to whatever the name of that colorscheme is.
+  --  --
+  --  -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  --  'folke/tokyonight.nvim',
+  --  priority = 1000, -- Make sure to load this before all the other start plugins.
+  --  config = function()
+  --    ---@diagnostic disable-next-line: missing-fields
+  --    require('tokyonight').setup {
+  --      transparent = true,
+  --      styles = {
+  --        comments = { italic = false }, -- Disable italics in comments
+  --        sidebars = 'transparent',
+  --        floats = 'transparent',
+  --      },
+  --    }
+
+  --    -- Load the colorscheme here.
+  --    -- Like many other themes, this one has different styles, and you could load
+  --    -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  --    vim.cmd.colorscheme 'tokyonight-night'
+  --  end,
+  --},
+
+  {
+    'rebelot/kanagawa.nvim',
+    priority = 1000,
     config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        transparent = true,
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-          sidebars = 'transparent',
-          floats = 'transparent',
+      require('kanagawa').setup {
+        theme = 'dragon',
+        background = {
+          dark = 'dragon',
+          light = 'lotus',
         },
       }
-
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'kanagawa'
     end,
   },
 
