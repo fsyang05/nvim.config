@@ -13,7 +13,7 @@ return {
                     "--offset-encoding=utf-16",
                 },
             }) 
-            vim.lsp.enable({ "lua_ls", "clangd", "basedpyright", "ruff" })
+            vim.lsp.enable({ "lua_ls", "clangd", "basedpyright", "ruff", "vtsls" })
         end,
     }
 }
