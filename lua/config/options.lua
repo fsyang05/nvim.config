@@ -17,11 +17,24 @@ vim.opt.incsearch = true
 
 -- UI stuff
 vim.opt.termguicolors = true  -- required for most colorschemes
--- vim.opt.signcolumn = "yes"    -- always show sign column (avoids text shifting)
-vim.opt.cursorline = true
+vim.opt.signcolumn = "yes"    -- always show sign column (avoids text shifting)
+-- vim.opt.cursorline = true
 vim.opt.scrolloff = 8
 vim.opt.wrap = false
 
 -- splits
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+
+-- lsp stuff
+vim.diagnostic.config({
+    virtual_text = true,       -- inline message at end of line
+    signs = true,              -- the W/E in the gutter
+    underline = true,          -- underline the problem in code
+    update_in_insert = false,  -- don't spam while typing
+    severity_sort = true,      -- show errors above warnings
+    float = {
+        border = "rounded",
+        source = true,           -- show which LSP produced the message
+    },
+})
