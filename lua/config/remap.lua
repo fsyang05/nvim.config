@@ -20,7 +20,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts) -- signature while typing
 
         -- actions
-        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename,      opts) -- rename symbol
+        vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename,      opts) -- rename symbol
         vim.keymap.set({"n","v"}, "<leader>ca", vim.lsp.buf.code_action, opts) -- code action
         vim.keymap.set("n", "<leader>f",  function() vim.lsp.buf.format({ async = true }) end, opts)
     end,
