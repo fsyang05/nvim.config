@@ -11,7 +11,11 @@ return {
             end,
         }
 
+        -- Rebuild the statusline from kanagawa's palette for the active background.
+        -- Re-run on every ColorScheme event so toggling light/dark updates the colors.
         local function build()
+            local variant = vim.o.background == "light" and "lotus" or "dragon"
+            local theme = require('kanagawa.colors').setup({ theme = variant }).theme
             local colors = {
                 fg     = theme.ui.fg,
                 bg     = theme.ui.bg,

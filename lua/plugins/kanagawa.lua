@@ -5,7 +5,7 @@ return {
 
   config = function()
     require("kanagawa").setup({
-      theme = "dragon",
+      theme = "lotus",
       background = {
         dark = "dragon",
         light = "lotus",
@@ -20,6 +20,11 @@ return {
         },
       },
     })
-    vim.cmd.colorscheme("kanagawa-dragon")
+    vim.cmd.colorscheme("kanagawa")
+
+    vim.keymap.set("n", "<leader>bg", function()
+      vim.o.background = vim.o.background == "dark" and "light" or "dark"
+      vim.cmd.colorscheme("kanagawa")
+    end, { desc = "Toggle light/dark background" })
   end,
 }
