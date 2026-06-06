@@ -4,6 +4,9 @@ vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
+vim.keymap.set("t", "<C-w>h", "<C-\\><C-n><C-w>h")
+vim.keymap.set("t", "<C-w>l", "<C-\\><C-n><C-w>l")
+
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         local opts = { buffer = args.buf }
@@ -13,7 +16,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("n", "gD", vim.lsp.buf.declaration,    opts)  -- go to declaration
         vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)  -- go to implementation
         vim.keymap.set("n", "gr", vim.lsp.buf.references,     opts)  -- list references
-        vim.keymap.set("n", "gt", vim.lsp.buf.type_definition,opts)  -- go to type definition
 
         -- info
         vim.keymap.set("n", "K",     vim.lsp.buf.hover,          opts) -- hover docs
