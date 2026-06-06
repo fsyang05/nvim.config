@@ -28,6 +28,7 @@ vim.opt.incsearch = true
 -- UI stuff
 vim.opt.termguicolors = true  -- required for most colorschemes
 vim.opt.signcolumn = "yes"    -- always show sign column (avoids text shifting)
+vim.opt.showmode = false
 -- vim.opt.cursorline = true
 vim.opt.scrolloff = 8
 vim.opt.wrap = false

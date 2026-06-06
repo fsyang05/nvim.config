@@ -60,6 +60,25 @@ return {
                 table.insert(config.sections.lualine_x, component)
             end
 
+            local mode_color = {
+                n = colors.cyan,
+                i = colors.green,
+                v = colors.orange,
+                V = colors.orange,
+                ["\22"] = colors.orange,
+                c = colors.yellow,
+                R = colors.red,
+                s = colors.orange,
+                S = colors.orange,
+                ["\19"] = colors.orange,
+                t = colors.green,
+            }
+            ins_left({
+                "mode",
+                color = function()
+                    return { fg = colors.bg, bg = mode_color[vim.fn.mode()] or colors.cyan, gui = "bold" }
+                end,
+            })
             ins_left({
                 "branch",
                 icon = " ",
