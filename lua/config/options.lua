@@ -40,8 +40,8 @@ vim.opt.splitbelow = true
 -- lsp stuff
 vim.diagnostic.config({
     virtual_text = true,       -- inline message at end of line
-    signs = true,              -- the W/E in the gutter
-    underline = true,          -- underline the problem in code
+    signs = false,              -- the W/E in the gutter
+    underline = false,          -- underline the problem in code
     update_in_insert = false,  -- don't spam while typing
     severity_sort = true,      -- show errors above warnings
     float = {
